@@ -1,0 +1,9 @@
+Game
+The game is a dungeon crawler where the player is created, random gear is generated from a set of items, and the player can choose what to do in his turn. Every 3 turns there is a possibility to go shopping where the player can use gold gathered from monsters and treasures. Monsters drop treasures when defeated and the player can also choose to use a chance to find treasure or defeat a monster and certainly get a treasure from the defeated monster. Periodically, for example every 5 or 10 turns a stronger monster comes, a boss, that gives better loot, upgrades the player's stats (base damage, hitpoints, giving health potions etc.) when defeated. The game ends when the player is defeated or has defeated 3 bosses. The game is text-based.
+
+Create a player object and his gear
+Create the enemies which stats are dependent on the amount of bosses defeated
+Create a game loop for progressing through turns and losing the game
+Create combat and treasure mechanics
+
+Additional points can include making the shop, changing gear from the shop to the user, scoreboard saved in a file, player leveling etc.
