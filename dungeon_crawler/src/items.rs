@@ -15,12 +15,6 @@ pub struct DefaultGear {
     pub category: ItemCategory,
 }
 
-// pub struct Shop_Gear {
-//     name: String,
-//     price: u64,
-//     stats: Vec<String>,
-//     }
-
 impl DefaultGear {
     pub fn new(name: String, stat: i32, category: ItemCategory) -> Self {
         Self {

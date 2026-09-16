@@ -118,4 +118,8 @@ impl Player {
     pub fn potion_slots(&self) -> &Vec<DefaultGear> {
         &self.potion_slots
     }
+
+    pub fn add_coins(&mut self, amount: i32) {
+        self.coins += amount
+    }
 }

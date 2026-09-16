@@ -31,9 +31,9 @@ impl Enemy {
         }
     }
 
-    pub fn level_multiplier(player_level: i32, is_elite: bool) -> Self {
+    pub fn level_multiplier(defeated_elites: i32, is_elite: bool) -> Self {
         let elite_multiplier: f32 = if is_elite { 1.8 } else { 1.0 };
-        let level_multiplier = (player_level - 1) as f32;
+        let level_multiplier = defeated_elites as f32;
 
         let health = (BASE_HEALTH + level_multiplier * 4.0) * elite_multiplier;
         let armor = (BASE_ARMOR + level_multiplier * 1.5) * elite_multiplier;
