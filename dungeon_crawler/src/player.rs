@@ -1,8 +1,8 @@
 pub struct Player {
-    health: u64,
-    armor: u64,
-    base_damage: u64,
-    coins: u64,
-    level: u64,
+    health: i32,
+    armor: i32,
+    base_damage: i32,
+    coins: i32,
+    level: i32,
     inventory: Vec<String>,
     }
