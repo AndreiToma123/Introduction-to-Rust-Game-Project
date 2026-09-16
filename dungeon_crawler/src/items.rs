@@ -32,6 +32,28 @@ impl DefaultGear {
         &self.stat
     }
 
+    pub fn base_gear_list() -> Vec<(String, i32, ItemCategory)> {
+        vec![
+            (String::from("Helmet"), 2, ItemCategory::Armor),
+            (String::from("Chestplate"), 2, ItemCategory::Armor),
+            (String::from("Boots"), 1, ItemCategory::Armor),
+            (String::from("Shield"), 2, ItemCategory::InHand),
+            (String::from("Sword"), 2, ItemCategory::InHand),
+            (String::from("Dagger"), 1, ItemCategory::InHand),
+            (
+                String::from("Attack boost potion (+2)"),
+                2,
+                ItemCategory::Potion,
+            ),
+            (
+                String::from("Armor boost potion (+2)"),
+                2,
+                ItemCategory::Potion,
+            ),
+            (String::from("Healing potion (+2)"), 2, ItemCategory::Potion),
+        ]
+    }
+
     pub fn set_default_gear() -> (Vec<DefaultGear>, Vec<DefaultGear>, Vec<DefaultGear>) {
         let armor = vec![
             Self::new(String::from("Helmet"), 2, ItemCategory::Armor),
@@ -46,8 +68,16 @@ impl DefaultGear {
         ];
 
         let potions = vec![
-            Self::new(String::from("Attack boost potion (+2)"), 2, ItemCategory::Potion),
-            Self::new(String::from("Armor boost potion (+2)"), 2, ItemCategory::Potion),
+            Self::new(
+                String::from("Attack boost potion (+2)"),
+                2,
+                ItemCategory::Potion,
+            ),
+            Self::new(
+                String::from("Armor boost potion (+2)"),
+                2,
+                ItemCategory::Potion,
+            ),
             Self::new(String::from("Healing potion (+2)"), 2, ItemCategory::Potion),
         ];
 
@@ -56,18 +86,13 @@ impl DefaultGear {
 
     pub fn set_random_starting_gear() -> Vec<DefaultGear> {
         let (armor, in_hand, potions) = Self::set_default_gear();
-        let mut random_number= rand::rng();
+        let mut random_number = rand::rng();
         let mut final_starting_gear = Vec::new();
 
         for i in [armor, in_hand, potions] {
-            let picked: Vec<DefaultGear> = i
-                .sample(&mut random_number, 2)
-                .cloned()
-                .collect();
+            let picked: Vec<DefaultGear> = i.sample(&mut random_number, 2).cloned().collect();
             final_starting_gear.extend(picked);
         }
         final_starting_gear
     }
-
-
 }
