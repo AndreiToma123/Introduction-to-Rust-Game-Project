@@ -1,9 +1,18 @@
 use rand::seq::IndexedRandom;
 
+#[derive(Clone, PartialEq)]
+
+pub enum ItemCategory {
+    Armor,
+    InHand,
+    Potion,
+}
+
 #[derive(Clone)]
 pub struct DefaultGear {
     name: String,
     stat: i32,
+    pub category: ItemCategory,
 }
 
 // pub struct Shop_Gear {
@@ -13,10 +22,11 @@ pub struct DefaultGear {
 //     }
 
 impl DefaultGear {
-    pub fn new(name: String, stat: i32) -> Self {
+    pub fn new(name: String, stat: i32, category: ItemCategory) -> Self {
         Self {
             name: name.to_string(),
             stat,
+            category,
         }
     }
 
@@ -30,21 +40,21 @@ impl DefaultGear {
 
     pub fn set_default_gear() -> (Vec<DefaultGear>, Vec<DefaultGear>, Vec<DefaultGear>) {
         let armor = vec![
-            Self::new(String::from("Helmet"), 2),
-            Self::new(String::from("Chestplate"), 2),
-            Self::new(String::from("Boots"), 1),
+            Self::new(String::from("Helmet"), 2, ItemCategory::Armor),
+            Self::new(String::from("Chestplate"), 2, ItemCategory::Armor),
+            Self::new(String::from("Boots"), 1, ItemCategory::Armor),
         ];
 
         let in_hand = vec![
-            Self::new(String::from("Shield"), 2),
-            Self::new(String::from("Sword"), 2),
-            Self::new(String::from("Dagger"), 1),
+            Self::new(String::from("Shield"), 2, ItemCategory::InHand),
+            Self::new(String::from("Sword"), 2, ItemCategory::InHand),
+            Self::new(String::from("Dagger"), 1, ItemCategory::InHand),
         ];
 
         let potions = vec![
-            Self::new(String::from("Attack boost potion (+2)"), 2),
-            Self::new(String::from("Armor boost potion (+2)"), 2),
-            Self::new(String::from("Healing potion (+2)"), 2),
+            Self::new(String::from("Attack boost potion (+2)"), 2, ItemCategory::Potion),
+            Self::new(String::from("Armor boost potion (+2)"), 2, ItemCategory::Potion),
+            Self::new(String::from("Healing potion (+2)"), 2, ItemCategory::Potion),
         ];
 
         (armor, in_hand, potions)
