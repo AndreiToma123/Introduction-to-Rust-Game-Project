@@ -50,7 +50,7 @@ impl Player {
     }
 
     pub fn take_damage(&mut self, damage_taken: f32, is_blocked: bool) {
-        let blocked: f32 = if is_blocked { 0.4 } else { 1.0 };
+        let blocked: f32 = if is_blocked { 1.4 } else { 1.0 };
         let final_damage_taken = (damage_taken - self.armor * blocked).max(0.0);
         self.health -= final_damage_taken;
     }
@@ -71,6 +71,13 @@ impl Player {
                 .iter()
                 .map(|g| *g.get_default_item_stat() as f32)
                 .sum::<f32>()
+    }
+
+    pub fn health(&self) -> f32 {
+        self.health
+    }
+    pub fn level(&self) -> i32 {
+        self.level
     }
 
     pub fn equip(&mut self, item: DefaultGear, slot: usize) -> Result<Option<DefaultGear>, String> {
@@ -107,5 +114,8 @@ impl Player {
         };
 
         slots.push(item);
+    }
+    pub fn potion_slots(&self) -> &Vec<DefaultGear> {
+        &self.potion_slots
     }
 }

@@ -1,7 +1,5 @@
 use std::io::ErrorKind::ArgumentListTooLong;
 
-mod player;
-
 const BASE_HEALTH: f32 = 20.0;
 const BASE_ARMOR: f32 = 5.0;
 const BASE_DAMAGE: f32 = 5.0;
@@ -56,7 +54,7 @@ impl Enemy {
     }
 
     pub fn take_damage(&mut self, damage_taken: f32, is_blocked: bool) {
-        let blocked: f32 = if is_blocked { 0.4 } else { 1.0 };
+        let blocked: f32 = if is_blocked { 1.4 } else { 1.0 };
         let final_damage_taken = (damage_taken - self.armor * blocked).max(0.0);
         self.health -= final_damage_taken;
     }
