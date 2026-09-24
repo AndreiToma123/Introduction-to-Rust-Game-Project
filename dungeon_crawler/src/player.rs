@@ -1,7 +1,7 @@
 use crate::items::{DefaultGear, ItemCategory};
 
 const BASE_HEALTH: f32 = 50.0;
-const BASE_DAMAGE: f32 = 5.0;
+const BASE_DAMAGE: f32 = 10.0;
 pub struct Player {
     health: f32,
     armor: f32,
@@ -121,5 +121,27 @@ impl Player {
 
     pub fn add_coins(&mut self, amount: i32) {
         self.coins += amount
+    }
+
+    pub fn coins(&self) -> i32 {
+        self.coins
+    }
+
+    pub fn spend_coins(&mut self, amount: i32) -> bool {
+        if self.coins >= amount {
+            self.coins -= amount;
+            true
+        }
+        else {
+            false
+        }
+    }
+
+    pub fn armor_slots(&self) -> &Vec<DefaultGear> {
+        &self.armor_slots
+    }
+
+    pub fn in_hand_slots(&self) -> &Vec<DefaultGear> {
+        &self.in_hand_slots
     }
 }
