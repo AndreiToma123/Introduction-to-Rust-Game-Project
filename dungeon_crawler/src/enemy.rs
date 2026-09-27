@@ -15,13 +15,7 @@ pub struct Enemy {
 }
 
 impl Enemy {
-    pub fn new(
-        health: f32, 
-        armor: f32, 
-        damage: f32, 
-        coins: i32, 
-        is_elite: bool,
-    ) -> Self {
+    pub fn new(health: f32, armor: f32, damage: f32, coins: i32, is_elite: bool) -> Self {
         Self {
             health,
             armor,

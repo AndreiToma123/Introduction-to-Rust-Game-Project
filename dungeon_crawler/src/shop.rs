@@ -31,7 +31,7 @@ impl Shop {
             stock.push(ShopStock {
                 gear,
                 rarity: rarity.clone(),
-                price
+                price,
             });
         }
 
@@ -40,47 +40,48 @@ impl Shop {
 
     pub fn buy(&mut self, index: usize, player: &mut Player) -> Result<DefaultGear, String> {
         if index >= self.stock.len() {
+            return Err(String::from("Invalid choice. Please try again."));
+        }
+        let price = self.stock[index].price;
+
+        if !player.spend_coins(price) {
             return Err(String::from("You don't have enough coins."));
         }
-
         let listing = self.stock.remove(index);
         Ok(listing.gear)
     }
 }
 
-    impl Rarity {
-        pub fn label(&self) -> &str {
-            match self {
-                Rarity::Uncommon => "Uncommon",
-                Rarity::Rare => "Rare",
-                Rarity::Legendary => "Legendary",
-            }
+impl Rarity {
+    pub fn label(&self) -> &str {
+        match self {
+            Rarity::Uncommon => "Uncommon",
+            Rarity::Rare => "Rare",
+            Rarity::Legendary => "Legendary",
         }
     }
+}
 
-    fn rarity_setter(elites_defeated: i32) -> Rarity {
-        match elites_defeated {
-            0 => Rarity::Uncommon,
-            1 => Rarity::Rare,
-            _ => Rarity::Legendary,
-        }
+fn rarity_setter(elites_defeated: i32) -> Rarity {
+    match elites_defeated {
+        0 => Rarity::Uncommon,
+        1 => Rarity::Rare,
+        _ => Rarity::Legendary,
     }
+}
 
-    fn status_multiplier(rarity: &Rarity) -> i32 {
-        match rarity {
-            Rarity::Uncommon => 2,
-            Rarity::Rare => 3,
-            Rarity::Legendary => 4,
-        }
+fn status_multiplier(rarity: &Rarity) -> i32 {
+    match rarity {
+        Rarity::Uncommon => 2,
+        Rarity::Rare => 3,
+        Rarity::Legendary => 4,
     }
+}
 
-    fn price_tier(rarity: &Rarity) -> i32 {
-        match rarity {
-            Rarity::Uncommon => 10,
-            Rarity::Rare => 20,
-            Rarity::Legendary => 30,
-        }
+fn price_tier(rarity: &Rarity) -> i32 {
+    match rarity {
+        Rarity::Uncommon => 10,
+        Rarity::Rare => 20,
+        Rarity::Legendary => 30,
     }
-
-
-
+}

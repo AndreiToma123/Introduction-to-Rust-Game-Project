@@ -37,12 +37,16 @@ impl Player {
     }
 
     pub fn successful_encounter(&mut self, earned_xp: i32, earned_coins: i32) {
-        self.level += earned_xp;
         self.coins += earned_coins;
 
-        self.health = BASE_HEALTH + self.level as f32 * 4.0;
-        self.armor = self.level as f32 * 1.5;
-        self.damage = BASE_DAMAGE + self.level as f32 * 2.0;
+        if earned_xp > 0 {
+            self.level += earned_xp;
+            self.health = BASE_HEALTH + self.level as f32 * 4.0;
+            self.armor = self.level as f32 * 1.5;
+            self.damage = BASE_DAMAGE + self.level as f32 * 2.0;
+        } else {
+            self.heal(15.0);
+        }
     }
 
     pub fn is_alive(&self) -> bool {
@@ -131,8 +135,7 @@ impl Player {
         if self.coins >= amount {
             self.coins -= amount;
             true
-        }
-        else {
+        } else {
             false
         }
     }
@@ -143,5 +146,9 @@ impl Player {
 
     pub fn in_hand_slots(&self) -> &Vec<DefaultGear> {
         &self.in_hand_slots
+    }
+
+    pub fn heal(&mut self, amount: f32) {
+        self.health += amount
     }
 }

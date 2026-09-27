@@ -40,17 +40,9 @@ impl DefaultGear {
             (String::from("Shield"), 2, ItemCategory::InHand),
             (String::from("Sword"), 2, ItemCategory::InHand),
             (String::from("Dagger"), 1, ItemCategory::InHand),
-            (
-                String::from("Attack boost potion (+2)"),
-                2,
-                ItemCategory::Potion,
-            ),
-            (
-                String::from("Armor boost potion (+2)"),
-                2,
-                ItemCategory::Potion,
-            ),
-            (String::from("Healing potion (+2)"), 2, ItemCategory::Potion),
+            (String::from("Attack boost potion"), 2, ItemCategory::Potion),
+            (String::from("Armor boost potion"), 2, ItemCategory::Potion),
+            (String::from("Healing potion"), 2, ItemCategory::Potion),
         ]
     }
 

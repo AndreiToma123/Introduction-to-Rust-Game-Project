@@ -4,7 +4,22 @@ use crate::player::Player;
 use crate::shop::Shop;
 use rand::RngExt;
 use rand::seq::IndexedRandom;
-use std::io::{self, Read};
+use std::io;
+
+fn print_gear(label: &str, items: &Vec<DefaultGear>) {
+    println!("{}:", label);
+    if items.is_empty() {
+        println!("empty");
+    } else {
+        for item in items {
+            println!(
+                "{} (+{})",
+                item.get_default_item_name(),
+                item.get_default_item_stat()
+            );
+        }
+    }
+}
 
 pub fn start_combat(mut player: Player) {
     println!("The game has started!");
@@ -13,7 +28,9 @@ pub fn start_combat(mut player: Player) {
     let mut elite_encounter = false;
     let mut elites_defeated = 0;
     loop {
-        println!("Choose your next action: 1) Fight enemy 2) Search for treasure. 3) Try shopping");
+        println!(
+            "Choose your next action: 1) Fight enemy 2) Search for treasure 3) Try shopping 4) Check your gear"
+        );
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
@@ -31,13 +48,18 @@ pub fn start_combat(mut player: Player) {
 
         match user_choice {
             1 => {
+                //Encounter logic
                 if encounter_counter % 5 == 0 {
                     elite_encounter = true;
+                    println!(
+                        "You encounter an elite enemy! This one seems stronger than the rest..."
+                    );
+                } else {
+                    println!("You encounter a new enemy.");
                 }
 
                 let mut enemy = Enemy::level_multiplier(elites_defeated, elite_encounter);
-                println!("You encounter a new enemy.");
-
+                let mut attack_boost: f32 = 0.0;
                 loop {
                     println!(
                         "Your Stats: HP: {}, Armor: {}, Attack: {}",
@@ -66,6 +88,7 @@ pub fn start_combat(mut player: Player) {
 
                     match user_choice {
                         1 => {
+                            //Attack logic
                             let mut enemy_attack = false;
                             let mut enemy_choice = rand::rng().random_range(0..2);
                             if enemy_choice % 2 == 0 {
@@ -75,7 +98,18 @@ pub fn start_combat(mut player: Player) {
                                 println!("The enemy will block.");
                             }
 
-                            enemy.take_damage(player.total_damage(), !enemy_attack);
+                            let damage_dealt = player.total_damage() + attack_boost;
+
+                            if attack_boost > 0.0 {
+                                println!(
+                                    "The potion boosted your attack by {} damage",
+                                    attack_boost
+                                );
+                            }
+
+                            attack_boost = 0.0;
+
+                            enemy.take_damage(damage_dealt, !enemy_attack);
 
                             if !enemy.is_alive() {
                                 println!("You defeated the enemy!");
@@ -87,9 +121,11 @@ pub fn start_combat(mut player: Player) {
                             }
                         }
                         2 => {
+                            //Block logic
                             player.take_damage(enemy.damage, true);
                         }
                         3 => {
+                            // Potion logic
                             if player.potion_slots().is_empty() {
                                 println!("You have no potions.");
                                 continue;
@@ -116,8 +152,31 @@ pub fn start_combat(mut player: Player) {
                                 println!("That's not a valid potion slot");
                                 continue;
                             }
-                            player.use_potion(potion_choice - 1);
-                            player.take_damage(enemy.damage, false);
+                            let potion_name = player.potion_slots()[potion_choice - 1]
+                                .get_default_item_name()
+                                .clone();
+                            let effect_value =
+                                player.use_potion(potion_choice - 1).unwrap_or(0) as f32;
+
+                            let mut armor_boost_this_turn = 0.0;
+                            if potion_name.contains("Healing") {
+                                player.heal(effect_value);
+                                println!("You have restored {} HP", effect_value);
+                            } else if potion_name.contains("Attack") {
+                                attack_boost += effect_value;
+                                println!(
+                                    "Your next attack will be boosted by {} damage",
+                                    attack_boost
+                                );
+                            } else if potion_name.contains("Armor") {
+                                armor_boost_this_turn = effect_value;
+                                println!(
+                                    "Your armor will be boosted by {} for a turn.",
+                                    armor_boost_this_turn
+                                );
+                            }
+                            let incoming_damage = (enemy.damage - armor_boost_this_turn).max(0.0);
+                            player.take_damage(incoming_damage, false);
                         }
                         _ => {
                             println!("Please input a valid option.");
@@ -145,6 +204,7 @@ pub fn start_combat(mut player: Player) {
                 elite_encounter = false;
             }
             2 => {
+                //Treasure search logic
                 let random_treasure_chance = rand::rng().random_range(0..4);
                 if random_treasure_chance == 1 {
                     let treasure_value = rand::rng().random_range(0..4);
@@ -156,6 +216,7 @@ pub fn start_combat(mut player: Player) {
                 }
             }
             3 => {
+                //Shop logic
                 if turn_counter % 3 != 0 {
                     println!("The shop is closed... Try again later.");
                     continue;
@@ -258,6 +319,14 @@ pub fn start_combat(mut player: Player) {
                         }
                     }
                 }
+            }
+
+            4 => {
+                //Check gear logic
+                println!("Your equipment:");
+                print_gear("Armor", player.armor_slots());
+                print_gear("In hand", player.in_hand_slots());
+                print_gear("Potions", player.potion_slots());
             }
             _ => {
                 println!("Invalid choice. Please try again.");
