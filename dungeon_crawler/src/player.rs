@@ -44,7 +44,7 @@ impl Player {
             self.health = BASE_HEALTH + self.level as f32 * 4.0;
             self.max_health = self.health;
             self.armor = self.level as f32 * 1.5;
-            self.damage = BASE_DAMAGE + self.level as f32 * 2.0;
+            self.damage = BASE_DAMAGE + self.level as f32 * 1.5;
         } else {
             self.heal(10.0);
         }

@@ -7,7 +7,7 @@ use rand::seq::IndexedRandom;
 use std::io;
 
 fn print_gear(label: &str, items: &Vec<DefaultGear>) {
-    println!("{}:", label);
+    println!("\n{}:", label);
     if items.is_empty() {
         println!("empty");
     } else {
@@ -29,7 +29,7 @@ pub fn start_combat(mut player: Player) {
     let mut elites_defeated = 0;
     loop {
         println!(
-            "Choose your next action: 1) Fight enemy 2) Search for treasure 3) Try shopping 4) Check your gear"
+            "\nChoose your next action:\n| 1) Fight enemy | 2) Search for treasure | 3) Try shopping | 4) Check your gear |"
         );
         let mut input = String::new();
         io::stdin()
@@ -52,10 +52,10 @@ pub fn start_combat(mut player: Player) {
                 if encounter_counter % 5 == 0 {
                     elite_encounter = true;
                     println!(
-                        "You encounter an elite enemy! This one seems stronger than the rest..."
+                        "\nYou encounter an *elite* enemy! This one seems stronger than the rest..."
                     );
                 } else {
-                    println!("You encounter a new enemy.");
+                    println!("\nYou encounter a new enemy.");
                 }
 
                 let mut enemy = Enemy::level_multiplier(elites_defeated, elite_encounter);
@@ -66,11 +66,11 @@ pub fn start_combat(mut player: Player) {
                     if enemy_choice % 2 == 0 {
                         enemy_attack = true;
                         println!(
-                            "The enemy will attack. They will deal {} damage.\n",
+                            "\nThe enemy will *attack*. They will deal {} damage.\n",
                             enemy.damage
                         );
                     } else {
-                        println!("The enemy will block this turn.\n");
+                        println!("\nThe enemy will *block* this turn.\n");
                     }
                     println!(
                         "Your Stats: HP: {}, Armor: {}, Attack: {}",
@@ -82,7 +82,7 @@ pub fn start_combat(mut player: Player) {
                         "Enemy Stats: HP: {}, Armor: {}, Attack: {}",
                         enemy.health, enemy.armor, enemy.damage
                     );
-                    println!("1) Attack 2) Block 3) Use potion");
+                    println!("\n| 1) Attack | 2) Block | 3) Use potion |");
 
                     let mut input = String::new();
                     io::stdin()
@@ -104,7 +104,7 @@ pub fn start_combat(mut player: Player) {
 
                             if attack_boost > 0.0 {
                                 println!(
-                                    "The potion boosted your attack by {} damage",
+                                    "The potion boosted your attack by {} damage.",
                                     attack_boost
                                 );
                             }
@@ -114,7 +114,11 @@ pub fn start_combat(mut player: Player) {
                             enemy.take_damage(damage_dealt, !enemy_attack);
 
                             if !enemy.is_alive() {
-                                println!("You defeated the enemy!");
+                                println!("\nYou defeated the enemy!\n");
+                                println!("You earned {} gold coins.", enemy.get_coins());
+                                if enemy.is_elite {
+                                    println!("You leveled up.\nYour stats increased.\nYou unlocked new items in the shop.\n");
+                                }
                                 break;
                             }
 
@@ -128,7 +132,7 @@ pub fn start_combat(mut player: Player) {
                                 player.take_damage(enemy.damage, true);
                             } else {
                                 println!(
-                                    "You both choose to block. You are just staring at each other..."
+                                    "\nYou both choose to block. You are just staring at each other...\n"
                                 );
                             }
                         }
@@ -207,7 +211,7 @@ pub fn start_combat(mut player: Player) {
                     player.successful_encounter(0, enemy.get_coins());
                 }
                 if elites_defeated == 3 {
-                    println!("You have won the game! Congratulations!");
+                    println!("You won the game! Congratulations!");
                     break;
                 }
                 encounter_counter += 1;
@@ -219,10 +223,10 @@ pub fn start_combat(mut player: Player) {
                 if random_treasure_chance == 1 {
                     let treasure_value = rand::rng().random_range(0..5);
                     player.add_coins(treasure_value);
-                    println!("You found some treasure!");
-                    println!("It's {} gold coins!", treasure_value);
+                    println!("\n*You found some treasure!*");
+                    println!("*It's {} gold coins!*\n", treasure_value);
                 } else {
-                    println!("You found nothing this turn... Maybe next time.");
+                    println!("\nYou found nothing this turn... Maybe next time.\n");
                 }
             }
             3 => {
@@ -241,7 +245,7 @@ pub fn start_combat(mut player: Player) {
                         );
                         break;
                     }
-                    println!("You have {} coins.", player.coins());
+                    println!("You have {} gold coins.", player.coins());
                     println!("Shop inventory");
                     for (i, listing) in shop.stock.iter().enumerate() {
                         println!(
