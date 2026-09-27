@@ -27,7 +27,7 @@ fn main() {
 
     match user_choice {
         1 => {
-            let mut player = Player::new(50.0, 0.0, 5.0, 0, 1);
+            let mut player = Player::new(50.0, 50.0, 0.0, 5.0, 0, 1);
             for item in DefaultGear::set_random_starting_gear() {
                 player.add_starting_gear(item);
             }

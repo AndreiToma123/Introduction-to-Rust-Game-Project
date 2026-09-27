@@ -27,7 +27,7 @@ impl Shop {
         let mut stock = Vec::new();
 
         for (name, base_stat, category) in DefaultGear::base_gear_list() {
-            let gear = DefaultGear::new(name, base_stat * multiplier, category);
+            let gear = DefaultGear::new(name, base_stat * multiplier as f32, category);
             stock.push(ShopStock {
                 gear,
                 rarity: rarity.clone(),

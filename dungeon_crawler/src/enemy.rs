@@ -1,9 +1,9 @@
 use std::io::ErrorKind::ArgumentListTooLong;
 
 const BASE_HEALTH: f32 = 20.0;
-const BASE_ARMOR: f32 = 5.0;
+const BASE_ARMOR: f32 = 2.0;
 const BASE_DAMAGE: f32 = 5.0;
-const BASE_COINS: f32 = 1.0;
+const BASE_COINS: f32 = 4.0;
 
 #[derive(Clone)]
 pub struct Enemy {

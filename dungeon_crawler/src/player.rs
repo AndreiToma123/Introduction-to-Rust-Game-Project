@@ -4,6 +4,7 @@ const BASE_HEALTH: f32 = 50.0;
 const BASE_DAMAGE: f32 = 10.0;
 pub struct Player {
     health: f32,
+    max_health: f32,
     armor: f32,
     damage: f32,
     coins: i32,
@@ -16,16 +17,15 @@ pub struct Player {
 impl Player {
     pub fn new(
         health: f32,
+        max_health: f32,
         armor: f32,
         damage: f32,
         coins: i32,
         level: i32,
-        // armor_slots: Vec<DefaultGear>,
-        // in_hand_slots: Vec<DefaultGear>,
-        // potion_slots: Vec<DefaultGear>,
     ) -> Self {
         Self {
             health,
+            max_health: health,
             armor,
             damage,
             coins,
@@ -42,10 +42,11 @@ impl Player {
         if earned_xp > 0 {
             self.level += earned_xp;
             self.health = BASE_HEALTH + self.level as f32 * 4.0;
+            self.max_health = self.health;
             self.armor = self.level as f32 * 1.5;
             self.damage = BASE_DAMAGE + self.level as f32 * 2.0;
         } else {
-            self.heal(15.0);
+            self.heal(10.0);
         }
     }
 
@@ -55,7 +56,8 @@ impl Player {
 
     pub fn take_damage(&mut self, damage_taken: f32, is_blocked: bool) {
         let blocked: f32 = if is_blocked { 1.4 } else { 1.0 };
-        let final_damage_taken = (damage_taken - self.armor * blocked).max(0.0);
+        let armor = self.total_armor();
+        let final_damage_taken = (damage_taken - armor * blocked).max(0.0);
         self.health -= final_damage_taken;
     }
 
@@ -101,7 +103,7 @@ impl Player {
         }
     }
 
-    pub fn use_potion(&mut self, slot: usize) -> Option<i32> {
+    pub fn use_potion(&mut self, slot: usize) -> Option<f32> {
         if slot < self.potion_slots.len() {
             let potion = self.potion_slots.remove(slot);
             Some(*potion.get_default_item_stat())
@@ -149,6 +151,6 @@ impl Player {
     }
 
     pub fn heal(&mut self, amount: f32) {
-        self.health += amount
+        self.health = (self.health + amount).min(self.max_health);
     }
 }

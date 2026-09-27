@@ -61,6 +61,17 @@ pub fn start_combat(mut player: Player) {
                 let mut enemy = Enemy::level_multiplier(elites_defeated, elite_encounter);
                 let mut attack_boost: f32 = 0.0;
                 loop {
+                    let mut enemy_attack = false;
+                    let mut enemy_choice = rand::rng().random_range(0..2);
+                    if enemy_choice % 2 == 0 {
+                        enemy_attack = true;
+                        println!(
+                            "The enemy will attack. They will deal {} damage.\n",
+                            enemy.damage
+                        );
+                    } else {
+                        println!("The enemy will block this turn.\n");
+                    }
                     println!(
                         "Your Stats: HP: {}, Armor: {}, Attack: {}",
                         player.health(),
@@ -89,15 +100,6 @@ pub fn start_combat(mut player: Player) {
                     match user_choice {
                         1 => {
                             //Attack logic
-                            let mut enemy_attack = false;
-                            let mut enemy_choice = rand::rng().random_range(0..2);
-                            if enemy_choice % 2 == 0 {
-                                enemy_attack = true;
-                                println!("The enemy will also attack.");
-                            } else {
-                                println!("The enemy will block.");
-                            }
-
                             let damage_dealt = player.total_damage() + attack_boost;
 
                             if attack_boost > 0.0 {
@@ -122,7 +124,13 @@ pub fn start_combat(mut player: Player) {
                         }
                         2 => {
                             //Block logic
-                            player.take_damage(enemy.damage, true);
+                            if enemy_attack {
+                                player.take_damage(enemy.damage, true);
+                            } else {
+                                println!(
+                                    "You both choose to block. You are just staring at each other..."
+                                );
+                            }
                         }
                         3 => {
                             // Potion logic
@@ -156,16 +164,16 @@ pub fn start_combat(mut player: Player) {
                                 .get_default_item_name()
                                 .clone();
                             let effect_value =
-                                player.use_potion(potion_choice - 1).unwrap_or(0) as f32;
+                                player.use_potion(potion_choice - 1).unwrap_or(0.0) as f32;
 
                             let mut armor_boost_this_turn = 0.0;
                             if potion_name.contains("Healing") {
                                 player.heal(effect_value);
-                                println!("You have restored {} HP", effect_value);
+                                println!("You have restored {} HP.", effect_value);
                             } else if potion_name.contains("Attack") {
                                 attack_boost += effect_value;
                                 println!(
-                                    "Your next attack will be boosted by {} damage",
+                                    "Your next attack will be boosted by {} damage.",
                                     attack_boost
                                 );
                             } else if potion_name.contains("Armor") {
@@ -175,8 +183,10 @@ pub fn start_combat(mut player: Player) {
                                     armor_boost_this_turn
                                 );
                             }
-                            let incoming_damage = (enemy.damage - armor_boost_this_turn).max(0.0);
-                            player.take_damage(incoming_damage, false);
+                            if enemy_attack {
+                                let incoming_damage = (enemy.damage - armor_boost_this_turn).max(0.0);
+                                player.take_damage(incoming_damage, false);
+                            }
                         }
                         _ => {
                             println!("Please input a valid option.");
@@ -207,7 +217,7 @@ pub fn start_combat(mut player: Player) {
                 //Treasure search logic
                 let random_treasure_chance = rand::rng().random_range(0..4);
                 if random_treasure_chance == 1 {
-                    let treasure_value = rand::rng().random_range(0..4);
+                    let treasure_value = rand::rng().random_range(0..5);
                     player.add_coins(treasure_value);
                     println!("You found some treasure!");
                     println!("It's {} gold coins!", treasure_value);
