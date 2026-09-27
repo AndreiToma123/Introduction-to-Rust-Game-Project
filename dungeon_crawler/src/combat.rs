@@ -3,7 +3,7 @@ use crate::items::{DefaultGear, ItemCategory};
 use crate::player::Player;
 use crate::shop::Shop;
 use rand::RngExt;
-use rand::seq::IndexedRandom;
+// use rand::seq::IndexedRandom;
 use std::io;
 
 fn print_gear(label: &str, items: &Vec<DefaultGear>) {

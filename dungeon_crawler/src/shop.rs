@@ -1,4 +1,4 @@
-use crate::items::{DefaultGear, ItemCategory};
+use crate::items::DefaultGear;
 use crate::player::Player;
 
 #[derive(Clone, PartialEq)]

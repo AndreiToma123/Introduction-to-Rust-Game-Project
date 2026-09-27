@@ -25,7 +25,7 @@ impl Player {
     ) -> Self {
         Self {
             health,
-            max_health: health,
+            max_health,
             armor,
             damage,
             coins,
