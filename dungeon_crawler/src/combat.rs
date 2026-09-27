@@ -40,7 +40,7 @@ pub fn start_combat(mut player: Player) {
             Ok(number) => number,
             Err(_) => {
                 println!("Please input a number.");
-                return;
+                continue;;
             }
         };
 
@@ -93,7 +93,7 @@ pub fn start_combat(mut player: Player) {
                         Ok(number) => number,
                         Err(_) => {
                             println!("Please input a number.");
-                            return;
+                            continue;
                         }
                     };
 
@@ -194,7 +194,7 @@ pub fn start_combat(mut player: Player) {
                         }
                         _ => {
                             println!("Please input a valid option.");
-                            return;
+                            continue;
                         }
                     };
 
@@ -344,7 +344,7 @@ pub fn start_combat(mut player: Player) {
             }
             _ => {
                 println!("Invalid choice. Please try again.");
-                return;
+                continue;
             }
         };
     }
