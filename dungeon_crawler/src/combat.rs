@@ -4,7 +4,37 @@ use crate::player::Player;
 use crate::shop::Shop;
 use rand::RngExt;
 // use rand::seq::IndexedRandom;
+use std::fs::OpenOptions;
 use std::io;
+use std::io::Write;
+use std::process::exit;
+
+fn save_run(player: &Player, won: bool, enemis_defeated: i32, elites_defeated: i32) {
+    let mut text = String::new();
+    text.push_str("-----------------------------------\n");
+    text.push_str(&format!("{}\n", if won { "Victory!" } else { "Defeat" }));
+    text.push_str(&format!(
+        "Enemies defeated: {} of which {} Elites\n",
+        enemis_defeated, elites_defeated
+    ));
+
+    text.push_str(&format!(
+        "Stats: Level {}, HP {}, Armor {}, Attack {}, Coins {}\n",
+        player.level(),
+        player.health().max(0.0),
+        player.total_armor(),
+        player.total_damage(),
+        player.coins()
+    ));
+
+    match OpenOptions::new().create(true).append(true).open("saved_runs.txt") {
+        Ok(mut file) => match file.write_all(text.as_bytes()) {
+            Ok(_) => println!("Run saved to saved_runs.txt"),
+            Err(e) => println!("Couldn't write to file. {}", e),
+        },
+        Err(e) => println!("Couldn't open file. {}", e),
+    }
+}
 
 fn print_gear(label: &str, items: &Vec<DefaultGear>) {
     println!("\n{}:", label);
@@ -40,7 +70,7 @@ pub fn start_combat(mut player: Player) {
             Ok(number) => number,
             Err(_) => {
                 println!("Please input a number.");
-                continue;;
+                continue;
             }
         };
 
@@ -117,7 +147,9 @@ pub fn start_combat(mut player: Player) {
                                 println!("\nYou defeated the enemy!\n");
                                 println!("You earned {} gold coins.", enemy.get_coins());
                                 if enemy.is_elite {
-                                    println!("You leveled up.\nYour stats increased.\nYou unlocked new items in the shop.\n");
+                                    println!(
+                                        "You leveled up.\nYour stats increased.\nYou unlocked new items in the shop.\n"
+                                    );
                                 }
                                 break;
                             }
@@ -188,7 +220,8 @@ pub fn start_combat(mut player: Player) {
                                 );
                             }
                             if enemy_attack {
-                                let incoming_damage = (enemy.damage - armor_boost_this_turn).max(0.0);
+                                let incoming_damage =
+                                    (enemy.damage - armor_boost_this_turn).max(0.0);
                                 player.take_damage(incoming_damage, false);
                             }
                         }
@@ -200,7 +233,8 @@ pub fn start_combat(mut player: Player) {
 
                     if !player.is_alive() {
                         println!("You have been defeated. Game over.");
-                        return;
+                        save_run(&player, false, encounter_counter -1 , elites_defeated);
+                        exit(0);
                     }
                 }
                 //Level up and loot logic here
@@ -212,16 +246,17 @@ pub fn start_combat(mut player: Player) {
                 }
                 if elites_defeated == 3 {
                     println!("You won the game! Congratulations!");
-                    break;
+                    save_run(&player, true, encounter_counter, elites_defeated);
+                    exit(0);
                 }
                 encounter_counter += 1;
                 elite_encounter = false;
             }
             2 => {
                 //Treasure search logic
-                let random_treasure_chance = rand::rng().random_range(0..4);
+                let random_treasure_chance = rand::rng().random_range(1..4);
                 if random_treasure_chance == 1 {
-                    let treasure_value = rand::rng().random_range(0..5);
+                    let treasure_value = rand::rng().random_range(1..5);
                     player.add_coins(treasure_value);
                     println!("\n*You found some treasure!*");
                     println!("*It's {} gold coins!*\n", treasure_value);

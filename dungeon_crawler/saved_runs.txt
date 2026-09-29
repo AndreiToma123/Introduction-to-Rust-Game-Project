@@ -1,0 +1,24 @@
+-----------------------------------
+Victory!
+Enemies defeated: 15 of which 3 Elites
+Stats: Level 4, HP 66, Armor 14, Attack 24, Coins 63
+-----------------------------------
+Victory!
+Enemies defeated: 15 of which 3 Elites
+Stats: Level 4, HP 66, Armor 9.5, Attack 18.5, Coins 103
+-----------------------------------
+Victory!
+Enemies defeated: 15 of which 3 Elites
+Stats: Level 3, HP 37.40001, Armor 8, Attack 17.5, Coins 89
+-----------------------------------
+Victory!
+Enemies defeated: 15 of which 3 Elites
+Stats: Level 4, HP 66, Armor 9, Attack 19, Coins 103
+-----------------------------------
+Defeat
+Enemies defeated: 4 of which 0 Elites
+Stats: Level 1, HP 0, Armor 2.5, Attack 8.5, Coins 16
+-----------------------------------
+Victory!
+Enemies defeated: 15 of which 3 Elites
+Stats: Level 4, HP 66, Armor 12, Attack 21.5, Coins 91
