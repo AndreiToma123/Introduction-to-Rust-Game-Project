@@ -27,7 +27,11 @@ fn save_run(player: &Player, won: bool, enemis_defeated: i32, elites_defeated: i
         player.coins()
     ));
 
-    match OpenOptions::new().create(true).append(true).open("saved_runs.txt") {
+    match OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("saved_runs.txt")
+    {
         Ok(mut file) => match file.write_all(text.as_bytes()) {
             Ok(_) => println!("Run saved to saved_runs.txt"),
             Err(e) => println!("Couldn't write to file. {}", e),
@@ -233,7 +237,7 @@ pub fn start_combat(mut player: Player) {
 
                     if !player.is_alive() {
                         println!("You have been defeated. Game over.");
-                        save_run(&player, false, encounter_counter -1 , elites_defeated);
+                        save_run(&player, false, encounter_counter - 1, elites_defeated);
                         exit(0);
                     }
                 }

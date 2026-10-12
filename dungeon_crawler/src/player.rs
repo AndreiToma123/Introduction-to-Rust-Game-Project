@@ -56,8 +56,7 @@ impl Player {
 
     pub fn take_damage(&mut self, damage_taken: f32, is_blocked: bool) {
         let blocked: f32 = if is_blocked { 1.4 } else { 1.0 };
-        let armor = self.total_armor();
-        let final_damage_taken = (damage_taken - armor * blocked).max(0.0);
+        let final_damage_taken = (damage_taken - self.total_armor() * blocked).max(0.0);
         self.health -= final_damage_taken;
     }
 
